@@ -3,14 +3,21 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions: {}
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     permissions:
+      checks: write
       contents: read
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-    - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+      - name: Provision runner
+        uses: nationalarchives/org-actions-provision-runner@5657f48ecd0fd31bfe857919149f1fdc690d53ed # v1.0.1
+        with:
+          wiz-sensor-token: ${{ secrets.WIZ_SENSOR_TOKEN }}
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
